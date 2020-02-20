@@ -34,7 +34,7 @@ class PlannerNode:
             self.north = data.data
         else: # callback relativa al qr_topic
             cv_image = self.bridge_object.imgmsg_to_cv2(data, "bgr8")
-            cropped = cv_image[0:250, 0:640]  # immagine ritagliata per centrare il landmark
+            cropped = cv_image[0:250, 0:640]  # immagine ritagliata per inquadrare solo il landmark
             self.qr_code, self.qr_distance = self.landmark.get_qrdata(cropped) # si invoca il metodo della classe Landmark get_qrdata
 									       # per avere il contenuto e la distanza dal qr_code
 
