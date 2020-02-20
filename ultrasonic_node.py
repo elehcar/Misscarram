@@ -52,7 +52,6 @@ class UltraSuoni(object):
         while GPIO.input(echo) == 1 and stop <= timeout:
 	    # stop viene aggiornato 
             stop = time.time()
-	# il setup successivo mi sembra inutile
         GPIO.setup(self.GPIO_TRIGGER, GPIO.OUT)
 	# Definisco lo stato del pin relativo al trigger come basso per fermare la misura
         GPIO.output(self.GPIO_TRIGGER, False)
