@@ -43,19 +43,18 @@ class ObstacleAvoidance(object):
         if args == 0: # la callback è relativa a "image_topic"
             cv_image = self.bridge_object.imgmsg_to_cv2(data, "bgr8")
             cropped = cv_image[100:480, 0:640] # immagine ritagliata per evitare di prendere anche altri oggetti colorati fuori dalla pista
-            # cv2.imshow("im", cropped)
-            # cv2.waitKey(0)
+
 	    # calcolo dell'area e del target dell'ostacolo eventualmente rilevato ricorrendo alla classe Distance
             self.area, self.target_x = self.distance.find_area(cropped)
 	    # calcolo della distanza dal possibile ostacolo ricorrendo nuovamente alla classe Distance
             self.distanza_ostacolo = self.distance.distancetoCamera(self.area)
 
             if 70 < self.distanza_ostacolo <= 100: # oggetto è ancora lontano 
-                self.factor = 0.9 # mantengo la stessa velocità angolare
+                self.factor = 0.9 # diminuisco la velocità angolare
             elif 50 < self.distanza_ostacolo <= 70: # oggetto è più vicino
-                self.factor = 1 # aumento la velocità di rotazione
+                self.factor = 1 # mantengo la stessa la velocità di rotazione
             else: # ostacolo imminente
-                self.factor = 1.2 # aumento maggiormente la velocità angolare
+                self.factor = 1.2 # aumento la velocità angolare
         else: # la callback è relativa a "ultrasuoni_topic" e prende semplicemente i valori di distanza pubblicati
             self.distanza_sx = data.left_us
             self.distanza_dx = data.right_us
@@ -69,13 +68,13 @@ class ObstacleAvoidance(object):
                 speed.angular.z = 0 # non ruoto
                 print("{OBSTACLE_AVOIDANCE} Linear: " + str(speed.linear.x) + ", Angular: " + str(speed.angular.z))
 
-            elif self.distanza_sx < 15:  # se ho ostacolo a sx vado a dx
+            elif self.distanza_sx < 15:  # se ho ostacolo a sx va indietro a dx
                 # imposto una velocità angolare che lo fa spostare un po' verso dx (segno negativo)
                 speed.linear.x = self.linear_vel_base * -1
                 speed.angular.z = self.angular_vel_base * -1
                 print("{OBSTACLE_AVOIDANCE} Linear: " + str(speed.linear.x) + ", Angular: " + str(speed.angular.z))
 
-            elif self.distanza_dx < 15:  # se ho ostacolo a dx vado a sx
+            elif self.distanza_dx < 15:  # se ho ostacolo a dx va indietro a sx
                 # imposto una velocità angolare che lo fa spostare un po' verso sx
                 speed.linear.x = self.linear_vel_base * -1
                 speed.angular.z = self.angular_vel_base
