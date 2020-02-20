@@ -30,7 +30,6 @@ class MotorDriver(object):
         self.MAX_PWM = 100
 
         self.MULTIPLIER_STANDARD = 0.3
-        # nel codice era messo 1.0 quello del pivot e 0.1 quello standard
         self.MULTIPLIER_PIVOT = 0.3
 
         GPIO.setmode(GPIO.BCM)
@@ -49,7 +48,6 @@ class MotorDriver(object):
         self.p1.start(self.PWM1)
         self.p2.start(self.PWM2)
 
-        # self.change_speed(0.1, 0)
 
     def __del__(self):
         GPIO.cleanup()
@@ -174,7 +172,7 @@ class MotorDriver(object):
 
     def change_speed(self, ls, a_s):
         # stabiliamo se il cerchio che dobbiamo percorrere è piccolo o grande 
-        # a seconda dei valori di velocità lineare e accelerazione angolare
+        # a seconda dei valori di velocità lineare e velocità angolare
         body_turn_radius = self.calculate_body_turn_radius(ls, a_s)
 
         # calcoliamo sulla base di quanto deve girare il robot quale deve essere il raggio della curva delle singole ruote
